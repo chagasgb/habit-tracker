@@ -28,15 +28,23 @@ class HabitService:
 
     @staticmethod
     def get_scheduled_habits_db(db: Session, target_date: datetime.datetime):
+        """
+        Obtém os hábitos agendados para uma data específica.
+
+        Parâmetros:
+        - db: Sessão do banco de dados.
+        - target_date: Objeto datetime.datetime representando a data alvo.
+
+        O padrão do objeto datetime.datetime é:
+        - Formato: YYYY-MM-DD HH:MM:SS
+        - Exemplo: 2023-03-15 14:30:00
+        """
         WEEKDAY_TO_ABBR = {
             0: "Mo", 1: "Tu", 2: "We", 3: "Th", 4: "Fr", 5: "Sa", 6: "Su"
         }
         habit_crud = CRUDBase(Habit)
         habits = habit_crud.get_all(db)
         
-        logger.debug(f"Total de hábitos no banco: {len(habits)}")
-        for habit in habits:
-            logger.debug(f"Hábito: {habit.name}, Frequency: {habit.frequency}")
         
         scheduled_habits = []
         target_weekday_abbr = WEEKDAY_TO_ABBR[target_date.weekday()]
@@ -53,8 +61,4 @@ class HabitService:
                         "name": habit.name,
                         "frequency": habit.frequency
                     })
-            else:
-                logger.debug(f"Hábito '{habit.name}' sem frequency válido: {habit.frequency}")
-        
-        logger.debug(f"Hábitos agendados encontrados: {len(scheduled_habits)}")
         return scheduled_habits
