@@ -1,8 +1,6 @@
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from sqlalchemy.exc import SQLAlchemyError
+
 
 from models import Base
 from database import engine, get_db
@@ -27,25 +25,8 @@ async def read_root():
             <title>Hello</title>
         </head>
         <body>
-            <h1>Hello, world!</h1>
-            <p>FastAPI servindo HTML puro.</p>
+            <h1>Olá, Fast API</h1>
         </body>
     </html>
     """
     return HTMLResponse(content=html_content)
-
-
-# Endpoint de verificação do banco de dados
-@app.get("/db-status")
-def check_db_connection(db: Session = Depends(get_db)):
-    try:
-        result = db.execute(text("SELECT version();"))
-        version = result.scalar()
-
-        return {
-            "status": "Conectado com sucesso ao banco de dados!",
-            "postgres_version": version
-        }
-
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Erro na conexão com o banco: {str(e)}")

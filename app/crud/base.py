@@ -1,6 +1,5 @@
 from typing import Dict, Any, Type, Generic, TypeVar
 from sqlalchemy.orm import Session
-from models import Base
 
 # CRUD Genérico
 T = TypeVar("T")
