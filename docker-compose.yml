@@ -13,6 +13,7 @@ services:
       - habit_net
     environment:
       - PYTHONDONTWRITEBYTECODE=1
+#      - PYTHONPATH=/app
 
   nginx:
     image: nginx:latest

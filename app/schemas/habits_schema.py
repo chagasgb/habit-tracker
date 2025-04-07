@@ -14,7 +14,6 @@ class HabitCreate(BaseModel):
             raise ValueError(f"Dias inválidos. Valores válidos: {list(valid_days)}")
         return v
 
-
 class HabitResponse(BaseModel):
     id: int
     name: str
@@ -23,13 +22,3 @@ class HabitResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class RecordCreate(BaseModel):
-    habit_id: int
-
-class RecordResponse(BaseModel):
-    id: int
-    habit_id: int
-    timestamp: str
-
-    class Config:
-        from_attributes = True

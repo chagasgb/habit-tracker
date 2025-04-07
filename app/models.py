@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, JSON, Boolean
 from sqlalchemy.orm import  relationship, declarative_base
 
 Base = declarative_base()
@@ -9,6 +9,7 @@ class Habit(Base):
     name = Column(String, unique=True, index=True)
     frequency = Column(JSON, nullable=True)
     records = relationship("Record", back_populates="habit")
+    is_active = Column(Boolean, default=True)
 
 class Record(Base):
     __tablename__ = "records"

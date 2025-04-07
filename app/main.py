@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from models import Base
 from database import engine
-from routes import habit_router, record_router
+
+from routes.records import router as record_router  
+from routes.habits import router as habit_router
 
 # Criar as tabelas no PostgreSQL
 Base.metadata.create_all(bind=engine)

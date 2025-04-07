@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas.habits_schema import RecordCreate, RecordResponse
 from services.record_service import RecordService
 from database import get_db
 from sqlalchemy.orm import Session
+
+
+from schemas.records_schema import RecordCreate, RecordResponse
 
 router = APIRouter()
 
