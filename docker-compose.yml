@@ -9,6 +9,7 @@ services:
       - postgres
     volumes:
       - ./app:/app
+      - /app/__pycache__
     networks:
       - habit_net
 

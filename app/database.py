@@ -4,7 +4,7 @@ from typing import Generator
 
 DATABASE_URL = "postgresql://postgres:postgres@postgres:5432/habitdb"
 
-engine = create_engine(DATABASE_URL)  # <- sem connect_args para PostgreSQL
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db() -> Generator:

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import RecordCreate, RecordResponse
+from schemas.habits_schema import RecordCreate, RecordResponse
 from services.record_service import RecordService
 from database import get_db
 from sqlalchemy.orm import Session

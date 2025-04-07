@@ -1,15 +1,9 @@
-from sqlalchemy.orm import Session # type: ignore
-from fastapi import HTTPException # type: ignore
+from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from models import Habit  
 from crud.base import CRUDBase
-from schemas import HabitCreate, HabitResponse  
-from typing import List
+from schemas.habits_schema import HabitCreate, HabitResponse  
 import datetime
-import logging
-
-# Configurar logging básico
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 class HabitService:
     @staticmethod
@@ -48,14 +42,11 @@ class HabitService:
         
         scheduled_habits = []
         target_weekday_abbr = WEEKDAY_TO_ABBR[target_date.weekday()]
-        logger.debug(f"Dia alvo: {target_date}, Abreviação: {target_weekday_abbr}")
         
         for habit in habits:
             if habit.frequency and isinstance(habit.frequency, list):
-                days = habit.frequency  # frequency é uma lista diretamente
-                logger.debug(f"Verificando hábito '{habit.name}' com days: {days}")
+                days = habit.frequency
                 if target_weekday_abbr in days:
-                    logger.debug(f"Hábito '{habit.name}' agendado para {target_weekday_abbr}")
                     scheduled_habits.append({
                         "id": habit.id,
                         "name": habit.name,

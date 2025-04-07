@@ -1,6 +1,6 @@
 import datetime
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import HabitCreate, HabitResponse
+from schemas.habits_schema import HabitCreate, HabitResponse
 from services.habit_service import HabitService
 from database import get_db
 from sqlalchemy.orm import Session
