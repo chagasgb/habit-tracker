@@ -1,8 +1,8 @@
-from sqlalchemy.orm import Session
-from fastapi import HTTPException
-from models import Habit  # Import do modelo
+from sqlalchemy.orm import Session # type: ignore
+from fastapi import HTTPException # type: ignore
+from models import Habit  
 from crud.base import CRUDBase
-from schemas import HabitCreate, HabitResponse  # Import dos schemas
+from schemas import HabitCreate, HabitResponse  
 from typing import List
 import datetime
 import logging

@@ -1,13 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from models import Base
-
-# Configuração do banco de dados
-DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+from sqlalchemy.orm import sessionmaker
 from typing import Generator
+
+DATABASE_URL = "postgresql://postgres:postgres@postgres:5432/habitdb"
+
+engine = create_engine(DATABASE_URL)  # <- sem connect_args para PostgreSQL
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db() -> Generator:
     db = SessionLocal()

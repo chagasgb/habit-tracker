@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: .
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./app:/app
+    networks:
+      - habit_net
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_habit_tracker
+    volumes:
+      - ./nginx:/usr/share/nginx/html:ro
+      - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - habit_net
+
+  postgres:
+    image: postgres:15
+    container_name: postgres_habit_tracker
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: habitdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - habit_net
+
+volumes:
+  postgres_data:
+
+networks:
+  habit_net:
