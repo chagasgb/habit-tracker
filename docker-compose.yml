@@ -9,9 +9,10 @@ services:
       - postgres
     volumes:
       - ./app:/app
-      - /app/__pycache__
     networks:
       - habit_net
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
 
   nginx:
     image: nginx:latest
