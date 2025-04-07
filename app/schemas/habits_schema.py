@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 
-# Schemas
 class HabitCreate(BaseModel):
     name: str
     frequency: List[str] = Field(default_factory=lambda: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"])
