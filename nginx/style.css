@@ -1,118 +1,133 @@
+/* === Variáveis CSS === */
+:root {
+    --primary-bg: #121212;
+    --container-bg: rgba(38, 38, 38, 0.95);
+    --header-bg: rgba(80, 76, 190, 0.504);
+    --text-primary: #ffffff;
+    --text-secondary: #aaa;
+    --text-hover: #666;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --button-bg: #333;
+    --button-border: #444;
+    --active-border: #007bff;
+    --checkbox-checked: rgb(85, 150, 101);
+    --modal-bg: #333;
+    --input-bg: #555;
+    --btn-primary: #007bff;
+    --btn-primary-hover: #0056b3;
+    --scrollbar-track: rgba(255, 255, 255, 0.05);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+    --max-width-mobile: 400px; /* Limite para mobile */
+    --max-width-desktop: 800px; /* Limite maior para desktop */
+}
 
-body {
-    background-color: #121212;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.5rem;
+/* === Reset e Estilos Base === */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem; /* Base para mobile */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    flex-direction: column; /* Centraliza verticalmente */
+    flex-direction: column;
 }
 
+/* === Componentes: Cabeçalho === */
 .header-bar {
-    background: rgba(80, 76, 190, 0.504);
-    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Borda superior fina */
-    border-left: 1px solid rgba(255, 255, 255, 0.2); /* Borda esquerda fina */
-    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Borda direita fina */
-    border-radius: 20px 20px 0 0; /* Arredonda apenas os cantos superiores */
-    padding: 20px 40px;
+    background: var(--header-bg);
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-radius: 20px 20px 0 0;
+    padding: 10px 20px; /* Base para mobile */
     width: 90%;
-    max-width: 600px;
+    max-width: var(--max-width-mobile);
     text-align: left;
-    margin-bottom: 0px; /* Espaço entre a barra e o tracker-container */
+    margin-bottom: 0;
     display: flex;
-    justify-content: space-between; /* Distribui espaço entre os elementos */
-    align-items: center; /* Alinha os elementos verticalmente no centro */
+    justify-content: space-between;
+    align-items: center;
 }
 
+/* Estilo do ícone de adicionar */
 .add-icon {
-    margin-left: 10px; /* Margem à esquerda do ícone */
-    color: #aaa; /* Cor cinza */
-    font-size: 1.5rem; /* Tamanho do ícone */
-    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
-    transform: scale(0.8); /* Reduz o tamanho do ícone para torná-lo mais fino */
+    margin-left: 10px;
+    color: var(--text-secondary);
+    font-size: 1.5rem; /* Base para mobile */
+    cursor: pointer;
+    transform: scale(0.8);
 }
 
 .add-icon i {
-    transition: color 0.3s ease; /* Transição suave de cor */
+    transition: color 0.3s ease;
 }
 
 .add-icon:hover i {
-    color: #666; /* Cor mais escura ao passar o mouse */
+    color: var(--text-hover);
 }
 
+
+/* === Componentes: Container Principal === */
 .tracker-container {
-    background: rgba(38, 38, 38, 0.95); /* Cinza um pouco mais claro */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Borda inferior fina */
-    border-left: 1px solid rgba(255, 255, 255, 0.2); /* Borda esquerda fina */
-    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Borda direita fina */
-    border-radius: 0 0 20px 20px; /* Arredonda apenas os cantos inferiores */
-    padding: 25px;
+    background: var(--container-bg);
+    border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-radius: 0 0 20px 20px;
+    padding: 15px 20px 20px 20px;
     width: 90%;
-    max-width: 600px;
-    height: 80%; /* Define uma altura fixa para o container */
+    max-width: var(--max-width-mobile);
+    height: 80%;
+    justify-content: flex-start; /* <-- aqui está o pulo do gato */
     display: flex;
     flex-direction: column;
 }
 
+/* === Componentes: Dias da Semana === */
 .weekdays-container {
     display: flex;
-    justify-content: center; /* Centraliza os botões */
-    font-size: 1.25rem; /* Mesma fonte dos itens de hábitos */
-    color: #aaa; /* Mesma cor dos itens de hábitos */
-    text-align: center;
-    position: relative;
-    margin-bottom: 10px; /* Espaço menor abaixo dos botões */
+    gap: 10px; /* Espaçamento base para mobile */
+    padding: 0 10px;
+    width: 100%;
 }
 
 .weekdays-container button {
-    background: #333; /* Cinza mais claro */
-    border: 2px solid #444;
-    color: #aaa; /* Mesma cor dos itens de hábitos */
-    padding: 6px 10px; /* Tamanho menor para caber melhor */
-    border-radius: 20px; /* Arredondamento maior */
-    outline: none;
-    font-size: 1rem; /* Fonte menor para caber melhor */
+    background: var(--button-bg);
+    border: 2px solid var(--button-border);
+    color: var(--text-secondary);
+    border-radius: 22px;
+    font-size: 0.75rem; /* Base para mobile */
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-    margin: 5px; /* Margem entre os botões */
-    flex: 1 1 auto; /* Permite que os botões sejam flexíveis */
-}
-
-@media (max-width: 768px) {
-    .weekdays-container button {
-        padding: 5px 8px; /* Diminui o preenchimento */
-        font-size: 0.9rem; /* Diminui a fonte */
-    }
-}
-
-@media (max-width: 576px) {
-    .weekdays-container button {
-        padding: 4px 6px; /* Diminui o preenchimento */
-        font-size: 0.8rem; /* Diminui a fonte */
-    }
-}
-
-@media (max-width: 400px) {
-    .weekdays-container button {
-        padding: 3px 4px; /* Diminui o preenchimento */
-        font-size: 0.7rem; /* Diminui a fonte */
-    }
+    height: 50px; /* Base para mobile */
+    width: 40px; /* Base para mobile */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.3;
+    text-align: center;
 }
 
 .weekdays-container button.active {
-    background: #333; /* Mesmo fundo para manter consistência */
-    border: 2px solid #007bff; /* Borda fina azul */
-    color: #eeebeb; /* Mantém a cor do texto original */
+    background: var(--button-bg);
+    border: 2px solid var(--active-border);
+    color: #eeebeb;
 }
 
+/* === Componentes: Lista de Hábitos === */
 .habit-list-container {
     flex-grow: 1;
-    max-height: 500px; /* Define uma altura máxima para o container de hábitos */
+    max-height: 500px; /* Base para mobile */
     overflow-y: auto;
     padding-right: 10px;
     position: relative;
@@ -121,10 +136,10 @@ body {
 .list-group-item {
     background: transparent;
     color: #d6d6d6;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06); /* Ajuste o último valor (opacidade) conforme necessário */
     display: flex;
     align-items: center;
-    font-size: 15px;
+    font-size: 15px; /* Base para mobile */
     padding: 15px 15px;
     transition: background-color 0.3s ease;
 }
@@ -133,134 +148,12 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.no-habits-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #aaa;
-    font-size: 1.5rem;
-    font-weight: 300;
-    display: none; /* Oculta a mensagem inicialmente */
-}
-
-/* Estilo para o scroll minimalista e cinza */
-.habit-list-container::-webkit-scrollbar {
-    width: 6px; /* Largura do scroll */
-}
-
-.habit-list-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05); /* Fundo do scroll */
-}
-
-.habit-list-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2); /* Cor do thumb do scroll */
-    border-radius: 4px; /* Borda arredondada do thumb */
-}
-
-.habit-list-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4); /* Cor do thumb do scroll ao passar o mouse */
-}
-
-/* Estilos para o Modal */
-.modal-content {
-    background: #333; /* Fundo cinza escuro */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Borda fina */
-    border-radius: 20px; /* Arredondamento maior */
-    color: #aaa; /* Cor do texto */
-}
-
-.modal-header {
-    border-bottom: none; /* Remove a borda inferior */
-    padding: 0; /* Remove o padding */
-}
-
-.modal-footer {
-    border-top: none; /* Remove a borda superior */
-}
-
-.modal-title {
-    color: #aaa; /* Cor do título */
-}
-
-.btn-close {
-    background: none;
-    border: none;
-    color: #aaa; /* Cor do botão de fechar */
-    font-size: 1.5rem; /* Tamanho do botão de fechar */
-    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
-}
-
-.btn-close:hover {
-    color: #666; /* Cor mais escura ao passar o mouse */
-}
-
-.form-label.small {
-    color: #aaa; /* Cor dos rótulos do formulário */
-    font-size: 0.8rem; /* Diminui a fonte dos rótulos */
-}
-
-.form-control.bg-white.text-dark {
-    background: #555; /* Fundo cinza mais claro */
-    color: #ffffff; /* Texto branco */
-    border: 2px solid #444; /* Borda cinza */
-    padding: 10px; /* Preenchimento dos campos de entrada */
-    border-radius: 10px; /* Arredondamento dos campos de entrada */
-    outline: none; /* Remove o outline ao focar */
-    transition: border-color 0.3s ease; /* Transição suave da borda */
-}
-
-.form-control.bg-white.text-dark:focus {
-    border-color: #007bff; /* Borda azul ao focar */
-}
-
-.form-check-label.small {
-    color: #aaa; /* Cor dos rótulos de checkbox */
-    font-size: 0.8rem; /* Diminui a fonte dos rótulos de checkbox */
-    display: block; /* Coloca o label abaixo do checkbox */
-    margin-top: 4px; /* Espaço entre o checkbox e o label */
-}
-
-.btn-primary {
-    background: #007bff; /* Fundo do botão primário */
-    border: none; /* Sem borda */
-    color: #fff; /* Cor do texto do botão */
-    padding: 10px 20px; /* Preenchimento do botão */
-    border-radius: 10px; /* Arredondamento do botão */
-    outline: none; /* Remove o outline ao focar */
-    transition: background-color 0.3s ease; /* Transição suave do fundo */
-    font-size: 0.8rem; /* Diminui a fonte do botão */
-}
-
-.btn-primary:hover {
-    background: #0056b3; /* Fundo mais escuro ao passar o mouse */
-}
-
-.modal-backdrop.show {
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo do backdrop com transparência */
-}
-
-
-
-/* Ajustes para colocar o label abaixo do checkbox */
-.form-check-inline .form-check-label {
-    margin-left: 0; /* Remove a margem padrão do label */
-    display: block; /* Coloca o label abaixo do checkbox */
-    font-size: 0.8rem; /* Diminui a fonte do label */
-    margin-top: 4px; /* Espaço entre o checkbox e o label */
-}
-
-/* Reduzir o espaço no início do modal */
-.modal-body {
-    padding: 10px 20px; /* Espaço menor no início do modal */
-}
-
+/* Estilo do checkbox */
 .list-group-item input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    width: 20px;
+    width: 20px; /* Base para mobile */
     height: 20px;
     border: 2px solid #888;
     border-radius: 50%;
@@ -269,12 +162,12 @@ body {
     outline: none;
     position: relative;
     margin-right: 12px;
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Animação suave */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .list-group-item input[type="checkbox"]:checked {
-    background-color: rgb(85, 150, 101);
-    border-color: rgb(85, 150, 101);
+    background-color: var(--checkbox-checked);
+    border-color: var(--checkbox-checked);
 }
 
 .list-group-item input[type="checkbox"]:checked::after {
@@ -283,16 +176,141 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 12px;
-    color: white;
-    transition: opacity 0.2s ease-in; /* Transição sutil do check aparecendo */
+    font-size: 12px; /* Base para mobile */
+    color: var(--text-primary);
+    transition: opacity 0.2s ease-in;
     opacity: 1;
 }
 
 .list-group-item input[type="checkbox"]:hover:not(:checked) {
-    border-color: #aaa;
+    border-color: var(--text-secondary);
 }
 
+/* Estilo do scroll */
+.habit-list-container::-webkit-scrollbar {
+    width: 6px; /* Base para mobile */
+}
+
+.habit-list-container::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+.habit-list-container::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+
+.habit-list-container::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* Mensagem de "sem hábitos" */
+.no-habits-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.5rem; /* Base para mobile */
+    font-weight: 300;
+    display: none;
+}
+
+
+/* === Componentes: Modal === */
+.modal-content {
+    background: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--text-secondary);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 0;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.modal-title {
+    color: var(--text-secondary);
+}
+
+.modal-body {
+    padding: 10px 20px; /* Base para mobile */
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo do botão de fechar */
+.btn-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem; /* Base para mobile */
+    cursor: pointer;
+}
+
+.btn-close:hover {
+    color: var(--text-hover);
+}
+
+/* === Formulários === */
+.form-label.small {
+    color: var(--text-secondary);
+    font-size: 0.8rem; /* Base para mobile */
+}
+
+.form-control.bg-white.text-dark {
+    background: var(--input-bg);
+    color: var(--text-primary);
+    border: 2px solid var(--button-border);
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-control.bg-white.text-dark:focus {
+    border-color: var(--active-border);
+}
+
+.form-check-label.small {
+    color: var(--text-secondary);
+    font-size: 0.8rem; /* Base para mobile */
+    display: block;
+    margin-top: 4px;
+}
+
+.form-check-inline .form-check-label {
+    margin-left: 0;
+    display: block;
+    font-size: 0.8rem; /* Base para mobile */
+    margin-top: 4px;
+}
+
+/* === Botões === */
+.btn-primary {
+    background: var(--btn-primary);
+    border: none;
+    color: var(--text-primary);
+    padding: 10px 20px; /* Base para mobile */
+    border-radius: 10px;
+    outline: none;
+    transition: background-color 0.3s ease;
+    font-size: 0.8rem; /* Base para mobile */
+}
+
+.btn-primary:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* === Animações === */
 .habit-item {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -300,4 +318,82 @@ body {
 .habit-fade-out {
     opacity: 0;
     transform: translateY(20px);
+}
+
+/* === Responsividade: Telas Grandes (Computadores, a partir de 1025px) === */
+@media (min-width: 1025px) {
+    body {
+        font-size: 1.2rem; /* 1.5rem * 0.8 (redução de 20%) */
+    }
+
+    .header-bar {
+        padding: 16px 32px; /* 20px 40px * 0.8 */
+        max-width: calc(var(--max-width-desktop) * 0.8); /* 800px * 0.8 = 640px */
+    }
+
+    .add-icon {
+        font-size: 1.6rem; /* 2rem * 0.8 */
+        transform: scale(1);
+    }
+
+    .tracker-container {
+        max-width: calc(var(--max-width-desktop) * 0.8);
+        max-height: 560px; /* 700px * 0.8 */
+    }
+
+    .weekdays-container {
+        gap: 25px; /* Ajustado para preencher o container */
+        justify-content: space-between; /* Mantém a distribuição uniforme */
+    }
+
+    .weekdays-container button {
+        font-size: 0.8rem; /* 1rem * 0.8 */
+        height: 56px; /* 70px * 0.8 */
+        width: 48px; /* 60px * 0.8 - largura fixa */
+    }
+
+    .habit-list-container {
+        max-height: 480px; /* 600px * 0.8 */
+    }
+
+    .list-group-item {
+        font-size: 14.4px; /* 18px * 0.8 */
+        padding: 16px 16px; /* 20px 20px * 0.8 */
+    }
+
+    .list-group-item input[type="checkbox"] {
+        width: 22.4px; /* 28px * 0.8 */
+        height: 22.4px;
+    }
+
+    .list-group-item input[type="checkbox"]:checked::after {
+        font-size: 12.8px; /* 16px * 0.8 */
+    }
+
+    .habit-list-container::-webkit-scrollbar {
+        width: 8px; /* 10px * 0.8 */
+    }
+
+    .no-habits-message {
+        font-size: 1.6rem; /* 2rem * 0.8 */
+    }
+
+    .modal-body {
+        padding: 16px 32px; /* 20px 40px * 0.8 */
+    }
+
+    .btn-close {
+        font-size: 1.6rem; /* 2rem * 0.8 */
+    }
+
+    .form-label.small,
+    .form-check-label.small,
+    .form-check-inline .form-check-label {
+        font-size: 0.8rem; /* 1rem * 0.8 */
+    }
+
+    .btn-primary {
+        padding: 11.2px 22.4px; /* 14px 28px * 0.8 */
+        font-size: 0.8rem; /* 1rem * 0.8 */
+    }
 }

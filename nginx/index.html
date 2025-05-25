@@ -10,18 +10,18 @@
 </head>
 <body>
     <div class="header-bar">
-        <h3 class="text-left mb-1">Habit tracker</h3>
+        <h3 class="text-left mb-1">Bom dia, Gabriel</h3>
         <span class="add-icon" id="addHabitIcon">
             <i class="fas fa-plus"></i>
         </span>
     </div>
     <div class="tracker-container">
         <div class="weekdays-container d-flex justify-content-center mb-2" id="weekdaysContainer">
+            <!-- Botões inseridos pelo JS -->
         </div>
-
+    
         <div class="habit-list-container">
-            <ul class="list-group list-group-flush" id="habitList">
-            </ul>
+            <ul class="list-group list-group-flush" id="habitList"></ul>
             <div id="noHabitsMessage" class="no-habits-message">
                 <h4>Nenhum hábito 🙅‍♂️<br>Que tal adicionar algum?</h4>
             </div>
@@ -82,80 +82,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        function formatDate(date) {
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            return `${day}/${month}`;
-        }
+
+        function createWeekdayButtons() {
+            const weekdays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+            const container = document.getElementById('weekdaysContainer');
+            const today = new Date();
+            const todayIndex = (today.getDay() + 6) % 7; // Segunda = 0
         
-        async function generateWeekdays() {
-            const weekdaysContainer = document.getElementById('weekdaysContainer');
-            weekdaysContainer.innerHTML = ''; // Limpa o conteúdo existente
+            container.innerHTML = '';
         
-            const fixedYear = 2025; // Ano fixo
+            // Gera os últimos 7 dias a partir de hoje
+            const mondayThisWeek = new Date(today);
+            mondayThisWeek.setDate(today.getDate() - todayIndex); // Volta até segunda
         
-            for (let i = -3; i <= 3; i++) {
-                const date = new Date();
-                date.setFullYear(fixedYear); // Força o ano para 2025
-                date.setDate(date.getDate() + i);
-                
-                const formattedDate = formatDate(date); // Ex: "05/04"
-                const apiFormattedDate = formatDateForAPI(date); // Ex: "2025-04-05"
-                const dataDay = `D+${i}`;
+            for (let i = 0; i < 7; i++) {
+              const currentDate = new Date(mondayThisWeek);
+              currentDate.setDate(mondayThisWeek.getDate() + i);
         
-                const button = document.createElement('button');
-                button.className = 'btn btn-secondary weekday-btn';
-                button.setAttribute('data-day', dataDay);
-                button.textContent = formattedDate;
+              const dayName = weekdays[i];
+              const dayNumber = currentDate.getDate();
         
-                button.addEventListener('click', async function() {
-                    // Remover a classe 'active' de todos os botões
-                    document.querySelectorAll('.weekdays-container button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    // Adicionar a classe 'active' ao botão clicado
-                    this.classList.add('active');
-                    console.log('Dia selecionado:', this.getAttribute('data-day'), '-', apiFormattedDate);
+              const button = document.createElement('button');
+              button.className = 'btn btn-secondary weekday-btn';
+              button.setAttribute('data-day', dayName);
         
-                    // Fazer GET na API com a data
-                    try {
-                        const response = await fetch(`/habits/scheduled?date=${apiFormattedDate}`);
-                        const data = await response.json();
-                        console.log('Dados recebidos da API:', data);
-                        // Aqui você pode atualizar a interface com os dados
-                    } catch (error) {
-                        console.error('Erro ao buscar dados da API:', error);
-                    }
-                });
+              // Conteúdo vertical
+              button.innerHTML = `
+                <span class="day-name">${dayName}</span>
+                <span class="day-number">${dayNumber}</span>
+              `;
         
-                weekdaysContainer.appendChild(button);
+              if (i === todayIndex) {
+                button.classList.add('active');
+              }
         
-                // Seleciona o dia de hoje por padrão
-                if (i === 0) {
-                    button.classList.add('active');
-                }
+              container.appendChild(button);
             }
+          }
         
-            console.log('Weekdays generated:', weekdaysContainer.innerHTML);
-        }
+          window.addEventListener('DOMContentLoaded', createWeekdayButtons);
         
-        // Função para formatar data para exibição (ex: "05/04")
-        function formatDate(date) {
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            return `${day}/${month}`;
-        }
-        
-        // Função para formatar data para API (ex: "2025-04-05")
-        function formatDateForAPI(date) {
-            const year = date.getFullYear(); // já está fixado em 2025
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-        
-        function updateHabitList() {
-            axios.get('/habits')
+         function updateHabitList() {
+            axios.get('/api/habits')
                 .then(response => {
                     const habits = response.data;
                     const habitList = document.getElementById('habitList');
@@ -170,8 +138,11 @@
         
                         habits.forEach((habit, index) => {
                             const listItem = document.createElement('li');
-                            listItem.className = 'list-group-item d-flex align-items-center habit-item';
+                            listItem.className = 'list-group-item d-flex align-items-center justify-content-between habit-item';
                             listItem.draggable = true;
+        
+                            const leftContainer = document.createElement('div');
+                            leftContainer.className = 'd-flex align-items-center';
         
                             const checkbox = document.createElement('input');
                             checkbox.type = 'checkbox';
@@ -181,11 +152,29 @@
                             const habitText = document.createElement('span');
                             habitText.textContent = habit.name;
         
+                            leftContainer.appendChild(checkbox);
+                            leftContainer.appendChild(habitText);
+        
+                            const editIcon = document.createElement('i');
+                            editIcon.className = 'fas fa-pen';
+                            editIcon.style.color = '#6c757d';
+                            editIcon.style.cursor = 'pointer';
+                            editIcon.style.opacity = '0.5';
+                            editIcon.style.fontSize = '0.8rem';
+                            editIcon.title = 'Editar hábito';
+                            editIcon.addEventListener('click', (e) => {
+                                e.stopPropagation(); // Impede que o clique no ícone propague para o listItem
+                                alert(`Editar hábito: ${habit.name}`);
+                            });
+        
+                            listItem.appendChild(leftContainer);
+                            listItem.appendChild(editIcon);
+                            habitList.appendChild(listItem);
+        
                             // Evento ao marcar/desmarcar
                             checkbox.addEventListener('change', () => {
                                 if (checkbox.checked) {
                                     habitText.style.textDecoration = 'line-through';
-        
                                     const isLast = listItem === habitList.lastElementChild;
         
                                     if (!isLast) {
@@ -201,6 +190,12 @@
                                 } else {
                                     habitText.style.textDecoration = 'none';
                                 }
+                            });
+        
+                            // Evento ao clicar no item
+                            listItem.addEventListener('click', () => {
+                                checkbox.checked = !checkbox.checked;
+                                checkbox.dispatchEvent(new Event('change')); // Dispara o evento change para atualizar a UI
                             });
         
                             // Eventos de drag and drop
@@ -230,10 +225,6 @@
                                     }
                                 }
                             });
-        
-                            listItem.appendChild(checkbox);
-                            listItem.appendChild(habitText);
-                            habitList.appendChild(listItem);
                         });
                     }
                 })
@@ -276,7 +267,7 @@
                 description: habitDescription
             };
         
-            axios.post('/habits', habitData)
+            axios.post('/api/habits', habitData)
                 .then(response => {
                     console.log('Hábito adicionado com sucesso:', response.data);
                     // Limpar o formulário após adicionar o hábito
@@ -299,6 +290,9 @@
             generateWeekdays();
             updateHabitList();
         };
+        document.addEventListener('DOMContentLoaded', () => {
+            updateHabitList();
+        });
     </script>
 </body>
 </html>

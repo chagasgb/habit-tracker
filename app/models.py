@@ -9,7 +9,7 @@ class Habit(Base):
     name = Column(String, unique=True, index=True)
     frequency = Column(JSON, nullable=True)
     records = relationship("Record", back_populates="habit")
-    is_active = Column(Boolean, default=True)
+    #is_active = Column(Boolean, default=True)
 
 class Record(Base):
     __tablename__ = "records"
