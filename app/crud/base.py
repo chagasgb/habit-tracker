@@ -15,13 +15,13 @@ class CRUDBase(Generic[T]):
         db.refresh(db_obj)
         return db_obj
 
-    def get(self, db: Session, id: int):
+    def get_by_id(self, db: Session, id: int):
         return db.query(self.model).filter(self.model.id == id).first()
 
     def get_all(self, db: Session):
         return db.query(self.model).all()
 
-    def update(self, db: Session, id: int, obj_in: Dict[str, Any]):
+    def update_by_id(self, db: Session, id: int, obj_in: Dict[str, Any]):
         db_obj = db.query(self.model).filter(self.model.id == id).first()
         if db_obj:
             for key, value in obj_in.items():
@@ -30,7 +30,7 @@ class CRUDBase(Generic[T]):
             db.refresh(db_obj)
         return db_obj
 
-    def delete(self, db: Session, id: int):
+    def delete_by_id(self, db: Session, id: int):
         db_obj = db.query(self.model).filter(self.model.id == id).first()
         if db_obj:
             db.delete(db_obj)

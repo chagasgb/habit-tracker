@@ -21,6 +21,17 @@ class HabitService:
         return [HabitResponse(**habit.__dict__) for habit in habits]
 
     @staticmethod
+    def delete_by_id(db: Session, habit_id: int):
+        habit = db.query(Habit).filter(Habit.id == habit_id).first()
+
+        if not habit:
+            raise HTTPException(status_code=404, detail="Hábito não encontrado")
+
+        db.delete(habit)
+        db.commit()
+        return habit
+
+    @staticmethod
     def get_scheduled_habits_db(db: Session, target_date: datetime.datetime):
         """
         Obtém os hábitos agendados para uma data específica.
