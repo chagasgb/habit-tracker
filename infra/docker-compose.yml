@@ -1,14 +1,14 @@
 services:
   backend:
     build:
-      context: .
-    container_name: fastapi_app
+      context: ..
+      dockerfile: infra/Dockerfile
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     volumes:
-      - ./app:/app
+      - ../app:/app
     networks:
       - habit_net
     environment:
