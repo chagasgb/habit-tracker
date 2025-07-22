@@ -12,13 +12,6 @@ router = APIRouter()
 def create_habit(habit: HabitCreate, db: Session = Depends(get_db)):
     return HabitService.create(db, habit)
 
-#@router.post("")
-#def create_habits(habits: List[HabitCreate], db: Session = Depends(get_db)):
-#    created = []
-#    for habit in habits:
-#        created.append(HabitService.create(db, habit))
-#    return created
-
 @router.get("", response_model=List[HabitResponse])
 def get_habits(db: Session = Depends(get_db)):
     habits = HabitService.get_all(db)
@@ -30,7 +23,6 @@ def delete_habit(habit_id: int, db: Session = Depends(get_db)):
     return {
         "detail": f"Hábito '{habit.name}' (id {habit.id}) deletado com sucesso"
     }
-
 
 @router.get("/scheduled", response_model=list)
 def get_scheduled_habits(date: str, db: Session = Depends(get_db)):

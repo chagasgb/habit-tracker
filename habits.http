@@ -14,8 +14,11 @@ Content-Type: application/json
 ### Obter hábitos agendados para uma data específica
 GET http://localhost/api/habits/scheduled
     ?date=2025-07-27
-
     ## ANO MES DIA
 
 #### Delete a habit
 DELETE http://localhost/api/habits/22
+
+
+
+### DELETE ALL habits
