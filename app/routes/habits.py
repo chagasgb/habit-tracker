@@ -16,6 +16,9 @@ def create_habit(habit: HabitCreate, db: Session = Depends(get_db)):
 def get_habits(db: Session = Depends(get_db)):
     habits = HabitService.get_all(db)
     return habits
+    
+# ecapsular db session
+#https://chatgpt.com/c/689feba6-c364-832b-8dad-62ccc9d7a4e5
 
 @router.delete("/{habit_id}")
 def delete_habit(habit_id: int, db: Session = Depends(get_db)):
@@ -33,3 +36,5 @@ def get_scheduled_habits(date: str, db: Session = Depends(get_db)):
 
     scheduled_habits = HabitService.get_scheduled_habits_db(db, target_date)
     return [HabitResponse(**habit) for habit in scheduled_habits]
+
+#https://chatgpt.com/c/689fd716-b2a8-8321-8dd7-59ec53564ab0
