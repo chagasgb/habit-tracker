@@ -1,5 +1,5 @@
 ### Get all habits
-GET http://localhost/api/habits
+GET http://localhost:8000/habits
 
 ### Create a new habit
 POST http://localhost/api/habits
