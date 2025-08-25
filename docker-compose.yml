@@ -10,8 +10,7 @@ services:
       - ./app:/app
     networks:
       - habit_net
-    environment:
-      - PYTHONDONTWRITEBYTECODE=1
+
   postgres:
     image: postgres:15
     container_name: postgres_habit_tracker
@@ -24,6 +23,14 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - habit_net
+
+  cli:
+    build: 
+      context: ./cli
+    depends_on:
+      - backend
     networks:
       - habit_net
 

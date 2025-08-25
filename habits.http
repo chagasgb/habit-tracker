@@ -2,11 +2,11 @@
 GET http://localhost:8000/habits
 
 ### Create a new habit
-POST http://localhost/api/habits
+POST http://localhost:8000/habits
 Content-Type: application/json
 
   {
-    "name": "Tomar banho",
+    "name": "Tomar banhoooo",
     "frequency": ["Su"]
   }
 
