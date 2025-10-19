@@ -37,16 +37,16 @@ clean: ## Limpa arquivos temporários
 	find . -type f -name "*.pyc" -delete
 
 docker-build: ## Builda imagem Docker
-	docker build -t habit-tracker:latest .
+	docker build -t habit-tracker:latest -f docker/Dockerfile .
 
 docker-run: ## Executa container Docker
 	docker run -p 8000:8000 habit-tracker:latest
 
 docker-compose-up: ## Executa com docker-compose
-	docker-compose up --build
+	cd docker && docker-compose up --build
 
 docker-compose-down: ## Para docker-compose
-	docker-compose down
+	cd docker && docker-compose down
 
 dev: ## Executa em modo desenvolvimento
 	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000

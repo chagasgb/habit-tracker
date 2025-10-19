@@ -32,7 +32,7 @@ COPY --from=builder /tmp/wheels/*.whl ./
 RUN pip install --no-cache-dir *.whl
 
 # Copiar código da aplicação
-COPY app/. .
+COPY app/ ./app/
 
 # Criar usuário não-root
 RUN useradd --create-home --shell /bin/bash app \
