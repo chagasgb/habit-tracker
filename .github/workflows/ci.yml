@@ -39,7 +39,8 @@ jobs:
         
     - name: Install package with dev dependencies
       run: |
-        pip install dist/*.whl[dev]
+        pip install dist/*.whl
+        pip install pytest httpx
         
     - name: Run tests
       run: |
