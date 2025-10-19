@@ -6,8 +6,6 @@ from schemas.habits_schema import HabitCreate, HabitResponse
 import datetime
 
 
-#https://chatgpt.com/c/68f41337-c294-8333-af36-f242c1305423
-
 class HabitService:
     def __init__(self, db: Session):
         self.db = db

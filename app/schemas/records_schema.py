@@ -6,6 +6,12 @@ class RecordCreate(BaseModel):
     habit_id: int
 
 class RecordResponse(BaseModel):
+    message: str
+
+    class Config:
+        from_attributes = True
+
+class RecordDetail(BaseModel):
     id: int
     habit_id: int
     timestamp: str
