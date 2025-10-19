@@ -6,19 +6,16 @@ POST http://localhost:8000/habits
 Content-Type: application/json
 
   {
-    "name": "Tomar banhoooo",
+    "name": "limpar",
     "frequency": ["Su"]
   }
 
 
 ### Obter hábitos agendados para uma data específica
-GET http://localhost/api/habits/scheduled
-    ?date=2025-07-27
+GET http://localhost:8000/habits/scheduled
+    ?date=2025-10-12
     ## ANO MES DIA
 
 #### Delete a habit
-DELETE http://localhost/api/habits/22
+DELETE http://localhost:8000/habits/3
 
-
-
-### DELETE ALL habits

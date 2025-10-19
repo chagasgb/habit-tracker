@@ -2,7 +2,7 @@ import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from schemas.habits_schema import HabitCreate, HabitResponse
 from services.habit_service import HabitService
-from database import get_db
+from core.database import get_db
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -10,19 +10,18 @@ router = APIRouter()
 
 @router.post("")
 def create_habit(habit: HabitCreate, db: Session = Depends(get_db)):
-    return HabitService.create(db, habit)
+    service = HabitService(db)
+    return service.create(habit)
 
 @router.get("", response_model=List[HabitResponse])
 def get_habits(db: Session = Depends(get_db)):
-    habits = HabitService.get_all(db)
-    return habits
+    service = HabitService(db)
+    return service.get_all()
     
-# ecapsular db session
-#https://chatgpt.com/c/689feba6-c364-832b-8dad-62ccc9d7a4e5
-
 @router.delete("/{habit_id}")
 def delete_habit(habit_id: int, db: Session = Depends(get_db)):
-    habit = HabitService.delete_by_id(db, habit_id)
+    service = HabitService(db)
+    habit = service.delete_by_id(habit_id)
     return {
         "detail": f"Hábito '{habit.name}' (id {habit.id}) deletado com sucesso"
     }
@@ -34,7 +33,9 @@ def get_scheduled_habits(date: str, db: Session = Depends(get_db)):
     except ValueError:
         raise HTTPException(status_code=400, detail="Formato de data inválido. Use YYYY-MM-DD")
 
-    scheduled_habits = HabitService.get_scheduled_habits_db(db, target_date)
+    service = HabitService(db)
+    scheduled_habits = service.get_scheduled_habits_db(target_date)
     return [HabitResponse(**habit) for habit in scheduled_habits]
 
-#https://chatgpt.com/c/689fd716-b2a8-8321-8dd7-59ec53564ab0
+
+##https://chatgpt.com/c/68c47411-8c48-8329-b1d0-b906359132f4

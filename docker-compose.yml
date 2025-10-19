@@ -5,37 +5,42 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      mysql:
+        condition: service_healthy
     volumes:
       - ./app:/app
     networks:
       - habit_net
 
-  postgres:
-    image: postgres:15
-    container_name: postgres_habit_tracker
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_habit_tracker
     restart: always
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      POSTGRES_DB: habitdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_DATABASE: habitdb
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_INITDB_SKIP_TZINFO: 1
+      MYSQL_ROOT_HOST: "%"
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     networks:
       - habit_net
 
-  cli:
-    build: 
-      context: ./cli
-    depends_on:
-      - backend
-    networks:
-      - habit_net
+  #cli:
+  #  build: 
+  #    context: ./cli
+  #  depends_on:
+  #    - backend
+  #  networks:
+  #    - habit_net
 
 volumes:
-  postgres_data:
+  mysql_data:
 
 networks:
   habit_net:

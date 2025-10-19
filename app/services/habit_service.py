@@ -1,55 +1,52 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models import Habit  
-from crud.base import CRUDBase
+from models.habit import Habit  
+from services.habit_crud import HabitCRUD
 from schemas.habits_schema import HabitCreate, HabitResponse  
 import datetime
 
+
+#https://chatgpt.com/c/68f41337-c294-8333-af36-f242c1305423
+
 class HabitService:
-    @staticmethod
-    def create(db: Session, habit_data: HabitCreate):
-        if db.query(Habit).filter(Habit.name == habit_data.name).first():
+    def __init__(self, db: Session):
+        self.db = db
+        self.habit_crud = HabitCRUD(db)
+
+    def create(self, habit_data: HabitCreate):
+        if self.habit_crud.get_by_name(habit_data.name):
             raise HTTPException(status_code=400, detail="Hábito já existe")
         
-        habit_crud = CRUDBase(Habit)
-        return habit_crud.create(db, habit_data.model_dump())
+        return self.habit_crud.create(
+            name=habit_data.name, 
+            frequency=habit_data.frequency
+        )
 
-    @staticmethod
-    def get_all(db: Session):
-        habit_crud = CRUDBase(Habit)
-        habits = habit_crud.get_all(db)
+    def get_all(self):
+        habits = self.habit_crud.get_all()
         return [HabitResponse(**habit.__dict__) for habit in habits]
 
-    @staticmethod
-    def delete_by_id(db: Session, habit_id: int):
-        habit = db.query(Habit).filter(Habit.id == habit_id).first()
+    def delete_by_id(self, habit_id: int):
+        habit = self.habit_crud.get_by_id(habit_id)
 
         if not habit:
             raise HTTPException(status_code=404, detail="Hábito não encontrado")
 
-        db.delete(habit)
-        db.commit()
-        return habit
+        return self.habit_crud.delete(habit_id)
 
-    @staticmethod
-    def get_scheduled_habits_db(db: Session, target_date: datetime.datetime):
+    def get_scheduled_habits_db(self, target_date: datetime.datetime):
         """
         Obtém os hábitos agendados para uma data específica.
 
         Parâmetros:
-        - db: Sessão do banco de dados.
         - target_date: Objeto datetime.datetime representando a data alvo.
 
         O padrão do objeto datetime.datetime é:
         - Formato: YYYY-MM-DD HH:MM:SS
         - Exemplo: 2023-03-15 14:30:00
         """
-        WEEKDAY_TO_ABBR = {
-            0: "Mo", 1: "Tu", 2: "We", 3: "Th", 4: "Fr", 5: "Sa", 6: "Su"
-        }
-        habit_crud = CRUDBase(Habit)
-        habits = habit_crud.get_all(db)
-        
+        WEEKDAY_TO_ABBR = {0: "Mo", 1: "Tu", 2: "We", 3: "Th", 4: "Fr", 5: "Sa", 6: "Su"}
+        habits = self.habit_crud.get_all()
         
         scheduled_habits = []
         target_weekday_abbr = WEEKDAY_TO_ABBR[target_date.weekday()]

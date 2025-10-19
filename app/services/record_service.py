@@ -1,24 +1,22 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models import Record
-from crud.base import CRUDBase
+from models.record import Record
+from services.record_crud import RecordCRUD
 from sqlalchemy import func
 
 class RecordService:
-    @staticmethod
-    def create(db: Session, habit_id: int):
-        record_crud = CRUDBase(Record)
-        existing_record = (
-            db.query(Record)
-            .filter(Record.habit_id == habit_id)
-            .filter(func.date(Record.timestamp) == func.date(func.now()))
-            .first()
-        )
+    def __init__(self, db: Session):
+        self.db = db
+        self.record_crud = RecordCRUD(db)
+
+    def create(self, habit_id: int):
+        existing_record = self.record_crud.get_today_by_habit_id(habit_id)
         if existing_record:
             raise HTTPException(status_code=400, detail="Já existe um registro para este hábito hoje")
-        return record_crud.create(db, {"habit_id": habit_id})
+        return self.record_crud.create(habit_id)
 
-    @staticmethod
-    def get_all(db: Session):
-        record_crud = CRUDBase(Record)
-        return record_crud.get_all(db)
+    def get_all(self):
+        return self.record_crud.get_all()
+
+    def get_by_habit_id(self, habit_id: int):
+        return self.record_crud.get_by_habit_id(habit_id)
