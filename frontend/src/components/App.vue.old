@@ -1,0 +1,344 @@
+<script setup lang="ts">
+import { ref, computed, h } from "vue"
+
+const user = "Gabriel"
+
+/* datas base */
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+
+/* data selecionada (SÓ CLIQUE) */
+const selectedDate = ref(new Date(today))
+
+/* deslocamento do calendário (SETAS) */
+const dayOffset = ref(0)
+
+const habits = ref([
+  { id: 1, name: "Beber água", done: false },
+  { id: 2, name: "Estudar Vue.js", done: false },
+  { id: 3, name: "Caminhada 20 min", done: false },
+])
+
+const labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+
+function isSameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
+}
+
+/* ===== PROGRESSO ===== */
+const completedCount = computed(() =>
+  habits.value.filter(h => h.done).length
+)
+
+const progressPercent = computed(() => {
+  if (habits.value.length === 0) return 0
+  return Math.round((completedCount.value / habits.value.length) * 100)
+})
+
+const days = computed(() => {
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+
+  return Array.from({ length: 7 }).map((_, i) => {
+    const date = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + i - 3 + dayOffset.value
+    )
+
+    return {
+      date,
+      label: labels[date.getDay()],
+      day: date.getDate(),
+      isToday: isSameDay(date, today),
+      isYesterday: isSameDay(date, yesterday),
+      isSelected: isSameDay(date, selectedDate.value),
+    }
+  })
+})
+
+function prevDay() {
+  dayOffset.value--
+}
+
+function nextDay() {
+  dayOffset.value++
+}
+
+function selectDay(date: Date) {
+  selectedDate.value = new Date(date)
+}
+</script>
+
+<template>
+  <div class="app">
+
+    <!-- CARD PRINCIPAL -->
+    <div class="card">
+      <!-- HEADER -->
+      <header class="header">
+        <h3>Bom dia, {{ user }}</h3>
+        <button class="add-btn">+</button>
+      </header>
+
+      <!-- DAYS -->
+      <section class="days">
+        <button class="arrow" @click="prevDay">‹</button>
+
+        <div
+          v-for="(d, i) in days"
+          :key="i"
+          class="day"
+          :class="{ active: d.isSelected }"
+          @click="selectDay(d.date)"
+        >
+          <span v-if="d.isYesterday" class="crown">👑</span>
+          <span v-if="d.isToday" class="today-dot"></span>
+
+          <span class="label">{{ d.label }}</span>
+          <span class="number">{{ d.day }}</span>
+        </div>
+
+        <button class="arrow" @click="nextDay">›</button>
+      </section>
+
+      <!-- PROGRESS -->
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          :style="{ width: progressPercent + '%' }"
+        />
+      </div>
+
+      <!-- HABITS -->
+      <section class="habits">
+        <div
+          v-for="h in habits"
+          :key="h.id"
+          class="habit"
+          @click="h.done = !h.done"
+        >
+          <input type="checkbox" v-model="h.done" @click.stop />
+          <span :class="{ done: h.done }">{{ h.name }}</span>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="app-footer">
+        <span>v0.1.0</span>
+        <span class="footer-links">
+          <a href="#">GitHub</a>
+          <a href="#">Docs</a>
+          <a href="#">About</a>
+        </span>
+      </footer>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+* {
+  box-sizing: border-box;
+}
+
+/* APP */
+.app {
+  min-height: 100vh;
+  background: #0e0e11;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 0;
+  font-family: Inter, system-ui, sans-serif;
+  position: relative;
+}
+
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 560px;
+  height: 90vh;
+  background: #18181b;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #3b3a8f, #2f2e6d);
+  border-radius: 20px;
+  padding: 4px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 21px;
+  color: #fff;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* DAYS */
+.days {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow {
+  width: 20px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.day {
+  position: relative;
+  flex: 1;
+  background: #222226;
+  border-radius: 18px;
+  padding: 16px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.day.active {
+  outline: 2px solid #3b82f6;
+  background: #1f2937;
+}
+
+/* 👑 */
+.crown {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}
+
+/* 🔵 */
+.today-dot {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  border-radius: 50%;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+.number {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* PROGRESS */
+.progress-bar {
+  height: 4px;
+  background: #2a2a2f;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+/* HABITS */
+.habits {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+/* SCROLL */
+.habits::-webkit-scrollbar {
+  width: 4px;
+}
+
+.habits::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+
+/* ITEM */
+.habit {
+  background: #202024;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.habit span {
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.habit span.done {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* FOOTER */
+.app-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.footer-links {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-links a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #9ca3af;
+}
+</style>

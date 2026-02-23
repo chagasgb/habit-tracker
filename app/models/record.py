@@ -7,7 +7,6 @@ class Record(Base):
     __tablename__ = "records"
     
     id = Column(Integer, primary_key=True, index=True)
-    habit_id = Column(Integer, ForeignKey("habits.id"))
+    habit_id = Column(Integer, ForeignKey("habits.id", ondelete="CASCADE"), nullable=False)
     timestamp = Column(DateTime, default=func.now())
-    
     habit = relationship("Habit", back_populates="records")

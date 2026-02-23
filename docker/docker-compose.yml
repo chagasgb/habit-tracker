@@ -31,15 +31,6 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - habit_net
-
-  #cli:
-  #  build: 
-  #    context: ./cli
-  #  depends_on:
-  #    - backend
-  #  networks:
-  #    - habit_net
-
 volumes:
   mysql_data:
 

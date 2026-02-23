@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models.habit import Habit  
-from services.habit_crud import HabitCRUD
+from services.crud import HabitCRUD
 from schemas.habits_schema import HabitCreate, HabitResponse  
 import datetime
 
@@ -39,9 +38,7 @@ class HabitService:
         Parâmetros:
         - target_date: Objeto datetime.datetime representando a data alvo.
 
-        O padrão do objeto datetime.datetime é:
-        - Formato: YYYY-MM-DD HH:MM:SS
-        - Exemplo: 2023-03-15 14:30:00
+        O padrão do objeto datetime.datetime é: YYYY-MM-DD
         """
         WEEKDAY_TO_ABBR = {0: "Mo", 1: "Tu", 2: "We", 3: "Th", 4: "Fr", 5: "Sa", 6: "Su"}
         habits = self.habit_crud.get_all()

@@ -1,20 +1,13 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional, List
-
+from datetime import datetime
+from pydantic import BaseModel
 
 class RecordCreate(BaseModel):
     habit_id: int
 
 class RecordResponse(BaseModel):
-    message: str
-
-    class Config:
-        from_attributes = True
-
-class RecordDetail(BaseModel):
     id: int
     habit_id: int
-    timestamp: str
+    timestamp: datetime
 
     class Config:
         from_attributes = True
